@@ -1,0 +1,14 @@
+DecisionAI update — verified fixes
+
+1. Manual searches now bypass the provider cache so a user-initiated search can retrieve fresh offers and record genuine changed-price observations. This uses SerpApi credits on each manual search; avoid repeated unnecessary searches on the free plan.
+2. Price history is grouped by collection minute rather than calendar day. A later price change on the same day can now appear as a separate chart point. Multiple seller observations within the same minute are grouped to avoid clutter.
+3. The chart labels same-day points with times and explains that it shows collection points.
+4. SerpApi provider now checks its documented immersive-product API URL when returned, and extracts individual merchant offers/direct links when that response exposes them. It only uses URLs returned by SerpApi; if no merchant URL is supplied, the Google Shopping fallback remains. It checks up to five product detail endpoints per search to limit API usage.
+5. Added tests for same-day price changes and merchant-link extraction.
+
+Verification: pytest -q -> 98 passed.
+
+Important limitations:
+- Direct retailer links depend on SerpApi returning an immersive-product endpoint and merchant offer URLs. They cannot be guaranteed for every result.
+- Historical charts only show observations collected by this app after tracking began. No synthetic history is created.
+- Each manual search now forces fresh provider retrieval and may consume API quota. Search selectively to preserve the free monthly allowance.
